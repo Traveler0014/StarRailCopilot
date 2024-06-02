@@ -30,6 +30,7 @@ from tasks.dungeon.keywords.classes import DungeonEntrance
 from tasks.dungeon.state import DungeonState
 from tasks.map.interact.aim import inrange
 from tasks.map.keywords import KEYWORDS_MAP_WORLD, MapPlane
+from module.ocr.keyword import Keyword
 
 
 class DungeonTabSwitch(Switch):
@@ -144,6 +145,58 @@ class DraggableDungeonList(DraggableList):
     use_plane = False
     # limit_entrance: True to ensure the teleport button is insight
     limit_entrance = False
+
+    def insight_row(self, row: Keyword, main: ModuleBase, skip_first_screenshot=True) -> bool:
+        """
+        Args:
+            row:
+            main:
+            skip_first_screenshot:
+
+        Returns:
+            If success
+        """
+        row_index = self.keyword2index(row)
+        if not row_index:
+            logger.warning(f'Insight row {row} but index unknown')
+            return False
+
+        logger.info(f'Insight row: {row}, index={row_index}')
+        last_buttons: set[OcrResultButton] = None
+        bottom_check = Timer(3, count=5).start()
+        while 1:
+            if skip_first_screenshot:
+                skip_first_screenshot = False
+            else:
+                main.device.screenshot()
+
+            self.load_rows(main=main)
+
+            # End
+            if self.cur_buttons and self.cur_min <= row_index <= self.cur_max:
+            # if self.cur_buttons:
+                break
+
+            # Drag pages
+            # if row_index < self.cur_min:
+            #     self.drag_page(self.reverse_direction(self.drag_direction), main=main)
+            # elif self.cur_max < row_index:
+            #     self.drag_page(self.drag_direction, main=main)
+            self.drag_page(self.drag_direction, main=main)
+
+            # Wait for bottoming out
+            main.wait_until_stable(self.search_button, timer=Timer(
+                0, count=0), timeout=Timer(1.5, count=5))
+            skip_first_screenshot = True
+            if self.cur_buttons and last_buttons == set(self.cur_buttons):
+                if bottom_check.reached():
+                    logger.warning(f'No more rows in {self}')
+                    return False
+            else:
+                bottom_check.reset()
+            last_buttons = set(self.cur_buttons)
+
+        return True
 
     def load_rows(self, main: ModuleBase, allow_early_access=False):
         """
