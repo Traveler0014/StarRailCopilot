@@ -27,10 +27,10 @@ ITEM_NAME = ButtonWrapper(
     name='ITEM_NAME',
     share=Button(
         file='./assets/share/combat/obtain/ITEM_NAME.png',
-        area=(495, 187, 855, 211),
-        search=(475, 167, 875, 231),
-        color=(176, 177, 179),
-        button=(495, 187, 855, 211),
+        area=(495, 187, 855, 217),
+        search=(475, 167, 875, 237),
+        color=(182, 183, 185),
+        button=(495, 187, 855, 217),
     ),
 )
 MAY_OBTAIN = ButtonWrapper(
@@ -38,14 +38,14 @@ MAY_OBTAIN = ButtonWrapper(
     cn=Button(
         file='./assets/cn/combat/obtain/MAY_OBTAIN.png',
         area=(813, 379, 893, 397),
-        search=(812, 373, 895, 468),
+        search=(812, 330, 895, 468),
         color=(63, 71, 87),
         button=(813, 379, 893, 397),
     ),
     en=Button(
         file='./assets/en/combat/obtain/MAY_OBTAIN.png',
         area=(813, 379, 922, 397),
-        search=(813, 373, 923, 468),
+        search=(812, 330, 922, 468),
         color=(53, 61, 78),
         button=(813, 379, 922, 397),
     ),
