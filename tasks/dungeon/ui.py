@@ -34,6 +34,14 @@ from module.ocr.keyword import Keyword
 
 
 class DungeonTabSwitch(Switch):
+    def add_state(self, state, check_button, click_button=None):
+        # Load search
+        if check_button is not None:
+            check_button.load_search(TAB_SEARCH.area)
+        if click_button is not None:
+            click_button.load_search(TAB_SEARCH.area)
+        return super().add_state(state, check_button, click_button)
+
     def click(self, state, main):
         """
         Args:
